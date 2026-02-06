@@ -2,14 +2,14 @@
 
 using AppServices;
 
-public class DummyLogicTests
+public class MazeLogicTests
 {
     [Fact]
     public void Dummy_IncrementDecimal_Increments()
     {
         // Arrange
-        var dummy = new Dummy { DecimalProperty = 10.5m };
-        var logic = new DummyLogic();
+        var dummy = new parsedMaze { DecimalProperty = 10.5m };
+        var logic = new MazeLogic();
         var increment = 2.5m;
 
         // Act
@@ -23,8 +23,8 @@ public class DummyLogicTests
     public void Dummy_IncrementDecimal_NegativeIncrement()
     {
         // Arrange
-        var dummy = new Dummy { DecimalProperty = 10.5m };
-        var logic = new DummyLogic();
+        var dummy = new parsedMaze { DecimalProperty = 10.5m };
+        var logic = new MazeLogic();
         var increment = -3.0m;
 
         // Act
@@ -38,8 +38,8 @@ public class DummyLogicTests
     public void Dummy_IncrementDecimal_ZeroIncrement()
     {
         // Arrange
-        var dummy = new Dummy { DecimalProperty = 10.5m };
-        var logic = new DummyLogic();
+        var dummy = new parsedMaze { DecimalProperty = 10.5m };
+        var logic = new MazeLogic();
         var increment = 0.0m;
 
         // Act
@@ -53,8 +53,8 @@ public class DummyLogicTests
     public void Dummy_IncrementDecimal_Overflow()
     {
         // Arrange
-        var dummy = new Dummy { DecimalProperty = decimal.MaxValue - 1 };
-        var logic = new DummyLogic();
+        var dummy = new parsedMaze { DecimalProperty = decimal.MaxValue - 1 };
+        var logic = new MazeLogic();
         var increment = 2.0m;
 
         // Act & Assert
@@ -67,8 +67,8 @@ public class DummyLogicTests
     public void Dummy_IncrementDecimal_VariousCases(decimal initial, decimal increment, decimal expected)
     {
         // Arrange
-        var dummy = new Dummy { DecimalProperty = initial };
-        var logic = new DummyLogic();
+        var dummy = new parsedMaze { DecimalProperty = initial };
+        var logic = new MazeLogic();
 
         // Act
         logic.IncrementDecimal(dummy, increment);

@@ -32,10 +32,10 @@ try
     }
 
     // Get the importer service from DI container
-    var importer = host.Services.GetRequiredService<IDummyImporter>();
+    var importer = host.Services.GetRequiredService<IMazeImporter>();
 
     // Perform the import
-    var importedCount = await importer.ImportFromCsvAsync(parsedArgs.CsvFilePath, parsedArgs.IsDryRun);
+    var importedCount = await importer.ImportMazeAsync(parsedArgs.CsvFilePath, parsedArgs.IsDryRun);
 
     Console.WriteLine($"\nSuccessfully imported {importedCount} record(s).");
 
@@ -79,7 +79,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     // Register application services
     services.AddScoped<IFileReader, FileReader>();
-    services.AddScoped<IDummyCsvParser, DummyCsvParser>();
-    services.AddScoped<IDummyImportDatabaseWriter, DummyImportDatabaseWriter>();
-    services.AddScoped<IDummyImporter, DummyImporter>();
+    services.AddScoped<IMazeParser, MazeParser>();
+    services.AddScoped<IMazeImportDatabaseWriter, MazeImportDatabaseWriter>();
+    services.AddScoped<IMazeImporter, MazeImporter>();
 }

@@ -6,16 +6,16 @@ namespace ImporterTests;
 public class DataImporterTests
 {
     private readonly IFileReader fileReader;
-    private readonly IDummyCsvParser csvParser;
-    private readonly IDummyImportDatabaseWriter databaseWriter;
-    private readonly DummyImporter importer;
+    private readonly IMazeParser csvParser;
+    private readonly IMazeImportDatabaseWriter databaseWriter;
+    private readonly MazeImporter importer;
 
     public DataImporterTests()
     {
         fileReader = Substitute.For<IFileReader>();
-        csvParser = Substitute.For<IDummyCsvParser>();
-        databaseWriter = Substitute.For<IDummyImportDatabaseWriter>();
-        importer = new DummyImporter(fileReader, csvParser, databaseWriter);
+        csvParser = Substitute.For<IMazeParser>();
+        databaseWriter = Substitute.For<IMazeImportDatabaseWriter>();
+        importer = new MazeImporter(fileReader, csvParser, databaseWriter);
     }
 
     [Fact]
@@ -24,22 +24,22 @@ public class DataImporterTests
         // Arrange
         var csvFilePath = "test.csv";
         var csvContent = "Name;DecimalProperty\nTest1;10.5";
-        var dummies = new List<Dummy>
+        var dummies = new List<Maze>
         {
             new() { Name = "Test1", DecimalProperty = 10.5m }
         };
 
         fileReader.ReadAllTextAsync(csvFilePath).Returns(Task.FromResult(csvContent));
-        csvParser.ParseCsv(csvContent).Returns(dummies);
+        csvParser.ParseMaze(csvContent).Returns(dummies);
 
         // Act
-        var result = await importer.ImportFromCsvAsync(csvFilePath, isDryRun: false);
+        var result = await importer.ImportMazeAsync(csvFilePath, isDryRun: false);
 
         // Assert
         Assert.Equal(1, result);
         await databaseWriter.Received(1).BeginTransactionAsync();
         await databaseWriter.Received(1).ClearAllAsync();
-        await databaseWriter.Received(1).WriteDummiesAsync(Arg.Is<IEnumerable<Dummy>>(d => d.Count() == 1));
+        await databaseWriter.Received(1).WriteMazeAsync(Arg.Is<IEnumerable<Maze>>(d => d.Count() == 1));
         await databaseWriter.Received(1).CommitTransactionAsync();
         await databaseWriter.DidNotReceive().RollbackTransactionAsync();
     }
@@ -50,17 +50,17 @@ public class DataImporterTests
         // Arrange
         var csvFilePath = "test.csv";
         var csvContent = "Name;DecimalProperty\nTest1;10.5\nTest2;20.75";
-        var dummies = new List<Dummy>
+        var dummies = new List<Maze>
         {
             new() { Name = "Test1", DecimalProperty = 10.5m },
             new() { Name = "Test2", DecimalProperty = 20.75m }
         };
 
         fileReader.ReadAllTextAsync(csvFilePath).Returns(Task.FromResult(csvContent));
-        csvParser.ParseCsv(csvContent).Returns(dummies);
+        csvParser.ParseMaze(csvContent).Returns(dummies);
 
         // Act
-        var result = await importer.ImportFromCsvAsync(csvFilePath, isDryRun: true);
+        var result = await importer.ImportMazeAsync(csvFilePath, isDryRun: true);
 
         // Assert
         Assert.Equal(2, result);
@@ -79,7 +79,7 @@ public class DataImporterTests
 
         // Act & Assert
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await importer.ImportFromCsvAsync(csvFilePath));
+            async () => await importer.ImportMazeAsync(csvFilePath));
 
         await databaseWriter.Received(1).BeginTransactionAsync();
         await databaseWriter.Received(1).RollbackTransactionAsync();
@@ -95,11 +95,11 @@ public class DataImporterTests
         var expectedException = new InvalidOperationException("Invalid CSV");
 
         fileReader.ReadAllTextAsync(csvFilePath).Returns(Task.FromResult(csvContent));
-        csvParser.ParseCsv(csvContent).Throws(expectedException);
+        csvParser.ParseMaze(csvContent).Throws(expectedException);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await importer.ImportFromCsvAsync(csvFilePath));
+            async () => await importer.ImportMazeAsync(csvFilePath));
 
         await databaseWriter.Received(1).BeginTransactionAsync();
         await databaseWriter.Received(1).RollbackTransactionAsync();
@@ -112,19 +112,19 @@ public class DataImporterTests
         // Arrange
         var csvFilePath = "test.csv";
         var csvContent = "Name;DecimalProperty\nTest1;10.5";
-        var dummies = new List<Dummy>
+        var dummies = new List<Maze>
         {
             new() { Name = "Test1", DecimalProperty = 10.5m }
         };
         var expectedException = new InvalidOperationException("Database error");
 
         fileReader.ReadAllTextAsync(csvFilePath).Returns(Task.FromResult(csvContent));
-        csvParser.ParseCsv(csvContent).Returns(dummies);
-        databaseWriter.WriteDummiesAsync(Arg.Any<IEnumerable<Dummy>>()).Throws(expectedException);
+        csvParser.ParseMaze(csvContent).Returns(dummies);
+        databaseWriter.WriteMazeAsync(Arg.Any<IEnumerable<Maze>>()).Throws(expectedException);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await importer.ImportFromCsvAsync(csvFilePath));
+            async () => await importer.ImportMazeAsync(csvFilePath));
 
         await databaseWriter.Received(1).BeginTransactionAsync();
         await databaseWriter.Received(1).RollbackTransactionAsync();
@@ -137,17 +137,17 @@ public class DataImporterTests
         // Arrange
         var csvFilePath = "test.csv";
         var csvContent = "Name;DecimalProperty\n";
-        var dummies = new List<Dummy>();
+        var dummies = new List<Maze>();
 
         fileReader.ReadAllTextAsync(csvFilePath).Returns(Task.FromResult(csvContent));
-        csvParser.ParseCsv(csvContent).Returns(dummies);
+        csvParser.ParseMaze(csvContent).Returns(dummies);
 
         // Act
-        var result = await importer.ImportFromCsvAsync(csvFilePath, isDryRun: false);
+        var result = await importer.ImportMazeAsync(csvFilePath, isDryRun: false);
 
         // Assert
         Assert.Equal(0, result);
-        await databaseWriter.Received(1).WriteDummiesAsync(Arg.Is<IEnumerable<Dummy>>(d => d.Count() == 0));
+        await databaseWriter.Received(1).WriteMazeAsync(Arg.Is<IEnumerable<Maze>>(d => d.Count() == 0));
         await databaseWriter.Received(1).CommitTransactionAsync();
     }
 
@@ -157,13 +157,13 @@ public class DataImporterTests
         // Arrange
         var csvFilePath = "test.csv";
         var csvContent = "Name;DecimalProperty\nTest1;10.5";
-        var dummies = new List<Dummy> { new() { Name = "Test1", DecimalProperty = 10.5m } };
+        var dummies = new List<Maze> { new() { Name = "Test1", DecimalProperty = 10.5m } };
 
         fileReader.ReadAllTextAsync(csvFilePath).Returns(Task.FromResult(csvContent));
-        csvParser.ParseCsv(csvContent).Returns(dummies);
+        csvParser.ParseMaze(csvContent).Returns(dummies);
 
         // Act
-        await importer.ImportFromCsvAsync(csvFilePath, isDryRun: false);
+        await importer.ImportMazeAsync(csvFilePath, isDryRun: false);
 
         // Assert - Verify order of calls
         Received.InOrder(async () =>
@@ -171,8 +171,8 @@ public class DataImporterTests
             await databaseWriter.BeginTransactionAsync();
             await databaseWriter.ClearAllAsync();
             await fileReader.ReadAllTextAsync(csvFilePath);
-            csvParser.ParseCsv(csvContent);
-            await databaseWriter.WriteDummiesAsync(Arg.Any<IEnumerable<Dummy>>());
+            csvParser.ParseMaze(csvContent);
+            await databaseWriter.WriteMazeAsync(Arg.Any<IEnumerable<Maze>>());
             await databaseWriter.CommitTransactionAsync();
         });
     }

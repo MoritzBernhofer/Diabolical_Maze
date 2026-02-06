@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../TestInfrastructure/TestInfrastructure.csproj" />
-    <ProjectReference Include="..\Importer\Importer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

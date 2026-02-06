@@ -15,8 +15,8 @@ public class DatabaseWriterTests(DatabaseFixture fixture)
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
             context.Dummies.AddRange(
-                new Dummy { Name = "Test1", DecimalProperty = 10.5m },
-                new Dummy { Name = "Test2", DecimalProperty = 20.75m }
+                new Maze { Name = "Test1", DecimalProperty = 10.5m },
+                new Maze { Name = "Test2", DecimalProperty = 20.75m }
             );
             await context.SaveChangesAsync();
         }
@@ -24,7 +24,7 @@ public class DatabaseWriterTests(DatabaseFixture fixture)
         // Act
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var writer = new DummyImportDatabaseWriter(context);
+            var writer = new MazeImportDatabaseWriter(context);
             await writer.ClearAllAsync();
         }
 
@@ -41,7 +41,7 @@ public class DatabaseWriterTests(DatabaseFixture fixture)
     public async Task WriteDummiesAsync_AddsDummiesToDatabase()
     {
         // Arrange
-        var dummies = new List<Dummy>
+        var dummies = new List<Maze>
         {
             new() { Name = "Test1", DecimalProperty = 10.5m },
             new() { Name = "Test2", DecimalProperty = 20.75m }
@@ -50,9 +50,9 @@ public class DatabaseWriterTests(DatabaseFixture fixture)
         // Act
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var writer = new DummyImportDatabaseWriter(context);
+            var writer = new MazeImportDatabaseWriter(context);
             await writer.ClearAllAsync();
-            await writer.WriteDummiesAsync(dummies);
+            await writer.WriteMazeAsync(dummies);
         }
 
         // Assert
@@ -69,16 +69,16 @@ public class DatabaseWriterTests(DatabaseFixture fixture)
         // Arrange
         var dummies = new[]
         { 
-            new Dummy { Name = "Test", DecimalProperty = 10.5m }
+            new Maze { Name = "Test", DecimalProperty = 10.5m }
         };
 
         // Act
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var writer = new DummyImportDatabaseWriter(context);
+            var writer = new MazeImportDatabaseWriter(context);
             await writer.ClearAllAsync();
             await writer.BeginTransactionAsync();
-            await writer.WriteDummiesAsync(dummies);
+            await writer.WriteMazeAsync(dummies);
             await writer.CommitTransactionAsync();
         }
 
@@ -94,7 +94,7 @@ public class DatabaseWriterTests(DatabaseFixture fixture)
     public async Task TransactionMethods_RollbackSucceeds()
     {
         // Arrange
-        var dummies = new Dummy[]
+        var dummies = new Maze[]
         {
             new() { Name = "Test", DecimalProperty = 10.5m }
         };
@@ -102,10 +102,10 @@ public class DatabaseWriterTests(DatabaseFixture fixture)
         // Act
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var writer = new DummyImportDatabaseWriter(context);
+            var writer = new MazeImportDatabaseWriter(context);
             await writer.ClearAllAsync();
             await writer.BeginTransactionAsync();
-            await writer.WriteDummiesAsync(dummies);
+            await writer.WriteMazeAsync(dummies);
             await writer.RollbackTransactionAsync();
         }
 

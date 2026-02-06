@@ -6,14 +6,10 @@ namespace AppServices;
 
 public partial class ApplicationDataContext(DbContextOptions<ApplicationDataContext> options) : DbContext(options)
 {
-    public DbSet<Dummy> Dummies => Set<Dummy>();
+    public DbSet<MazeEntity> Mazes => Set<MazeEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Dummy>()
-            .Property(e => e.DecimalProperty)
-            .HasConversion<double>() // or use string for exact precision
-            .HasColumnType("REAL");
     }
 }
 

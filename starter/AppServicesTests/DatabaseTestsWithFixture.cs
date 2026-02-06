@@ -14,7 +14,7 @@ public class DatabaseTestsWithClassFixture(DatabaseFixture fixture)
         int dummyId;
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var dummy = new Dummy 
+            var dummy = new parsedMaze 
             { 
                 Name = "Test Dummy", 
                 DecimalProperty = 42.5m 
@@ -41,7 +41,7 @@ public class DatabaseTestsWithClassFixture(DatabaseFixture fixture)
         int dummyId;
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var dummy = new Dummy 
+            var dummy = new parsedMaze 
             { 
                 Name = "Original Name", 
                 DecimalProperty = 10.0m 
@@ -78,7 +78,7 @@ public class DatabaseTestsWithClassFixture(DatabaseFixture fixture)
         int dummyId;
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var dummy = new Dummy 
+            var dummy = new parsedMaze 
             { 
                 Name = "To Delete", 
                 DecimalProperty = 5.0m 
@@ -112,9 +112,9 @@ public class DatabaseTestsWithClassFixture(DatabaseFixture fixture)
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
             context.Dummies.AddRange(
-                new Dummy { Name = "Query Test 1", DecimalProperty = 10.0m },
-                new Dummy { Name = "Query Test 2", DecimalProperty = 20.0m },
-                new Dummy { Name = "Query Test 3", DecimalProperty = 30.0m }
+                new parsedMaze { Name = "Query Test 1", DecimalProperty = 10.0m },
+                new parsedMaze { Name = "Query Test 2", DecimalProperty = 20.0m },
+                new parsedMaze { Name = "Query Test 3", DecimalProperty = 30.0m }
             );
             await context.SaveChangesAsync();
         }
@@ -140,7 +140,7 @@ public class DatabaseTestsWithClassFixture(DatabaseFixture fixture)
         int dummyId;
         await using (var context = new ApplicationDataContext(fixture.Options))
         {
-            var dummy = new Dummy 
+            var dummy = new parsedMaze 
             { 
                 Name = "Decimal Test", 
                 DecimalProperty = 123.456m 

@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.AddSqliteDbContext<ApplicationDataContext>("database");
 builder.Services.AddOpenApi();
-builder.Services.AddScoped<IDummyLogic, DummyLogic>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
