@@ -1,6 +1,6 @@
 namespace AppServices;
 
-public record ParsedMaze(string content);
+public record ParsedMaze(string Content);
 
 public interface IMazeParser
 {
@@ -14,7 +14,6 @@ public enum MazeParseError
     InvalidRowCount,
     InvalidColumnCount,
     NoPossibleSolution,
-    PathToShort,  
     NotValidStartPoint,
     NotValidEndPoint
 }
@@ -40,9 +39,6 @@ public class MazeParseException(MazeParseError errorCode)
         { MazeParseError.NoPossibleSolution,
             "No valid path exists from the start point to the end point." },
 
-        { MazeParseError.PathToShort,
-            "The computed path is too short (it does not meet the minimum required length)." },
-
         { MazeParseError.NotValidStartPoint,
             "The maze start point is invalid (missing, duplicated, or placed on a blocked cell)." },
 
@@ -52,7 +48,6 @@ public class MazeParseException(MazeParseError errorCode)
 
     public MazeParseError ErrorCode { get; } = errorCode;
 }
-
 
 public class MazeParser : IMazeParser
 {

@@ -11,17 +11,18 @@ namespace AppServices.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Dummies",
+                name: "Mazes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    DecimalProperty = table.Column<double>(type: "REAL", nullable: false)
+                    Difficulty = table.Column<int>(type: "INTEGER", nullable: false),
+                    MazeData = table.Column<string>(type: "TEXT", nullable: false),
+                    SolutionSteps = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dummies", x => x.Id);
+                    table.PrimaryKey("PK_Mazes", x => x.Id);
                 });
         }
 
@@ -29,7 +30,7 @@ namespace AppServices.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Dummies");
+                name: "Mazes");
         }
     }
 }

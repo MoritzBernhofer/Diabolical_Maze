@@ -45,14 +45,14 @@ public static class MazeEndpoints
         }
         catch (MazeParseException ex)
         {
-            return Results.BadRequest("Maze parse error: " + ex.Message);
+            return Results.BadRequest(ex.ErrorCode.ToString() + " " + ex.Message);
         }
 
         var (solution, difficulty) = solver.SolveMaze(parsed);
 
         var entity = new MazeEntity
         {
-            MazeData = parsed.content,
+            MazeData = parsed.Content,
             Difficulty = difficulty,
             SolutionSteps = solution
         };

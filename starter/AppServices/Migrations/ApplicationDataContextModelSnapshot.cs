@@ -14,24 +14,28 @@ namespace AppServices.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
 
-            modelBuilder.Entity("AppServices.Dummy", b =>
+            modelBuilder.Entity("AppServices.MazeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("DecimalProperty")
-                        .HasColumnType("REAL");
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("MazeData")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SolutionSteps")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dummies");
+                    b.ToTable("Mazes");
                 });
 #pragma warning restore 612, 618
         }
