@@ -8,6 +8,8 @@ public static class MazeEndpoints
     {
         var group = app.MapGroup("/Mazes")
             .WithTags("Mazes");
+        
+        //TODO: Implement futher endpoints
 
         group.MapPost("/upload", UploadTravelFile)
             .Accepts<IFormFile>("multipart/form-data")
@@ -16,7 +18,6 @@ public static class MazeEndpoints
             .Produces<string>(StatusCodes.Status400BadRequest)
             .WithDescription("Uploads a travel .txt file, parses it, stores it, and returns the created travel.");
 
-        throw new NotImplementedException();
         return app;
     }
 

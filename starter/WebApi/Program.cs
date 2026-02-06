@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.AddSqliteDbContext<ApplicationDataContext>("database");
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IMazeParser, MazeParser>();
+builder.Services.AddScoped<IMazeSolver, MazeSolver>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
