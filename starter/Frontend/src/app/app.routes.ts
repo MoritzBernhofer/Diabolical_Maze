@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { DummiesList } from './dummies-list/dummies-list';
-import { GenerateRecords } from './generate-records/generate-records';
+import { MazeListComponent } from './maze-list/maze-list.component';
+import { MazeUploadComponent } from './maze-upload/maze-upload.component';
 
 export const routes: Routes = [
-    { path: 'dummies', component: DummiesList },
-    { path: 'generate', component: GenerateRecords },
-    { path: '', redirectTo: '/dummies', pathMatch: 'full' }
+    { path: 'mazes', component: MazeListComponent },
+    { path: 'upload', component: MazeUploadComponent },
+    { path: '', redirectTo: '/mazes', pathMatch: 'full' }
 ];

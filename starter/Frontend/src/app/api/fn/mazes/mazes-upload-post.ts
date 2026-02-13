@@ -7,14 +7,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Dummy } from '../../models/dummy';
+import { MazeDto } from '../../models/maze-dto';
 
-export interface DummiesGet$Params {
+export interface MazesUploadPost$Params {
+      body: {
+'file'?: Blob;
+}
 }
 
-export function dummiesGet(http: HttpClient, rootUrl: string, params?: DummiesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Dummy>>> {
-  const rb = new RequestBuilder(rootUrl, dummiesGet.PATH, 'get');
+export function mazesUploadPost(http: HttpClient, rootUrl: string, params: MazesUploadPost$Params, context?: HttpContext): Observable<StrictHttpResponse<MazeDto>> {
+  const rb = new RequestBuilder(rootUrl, mazesUploadPost.PATH, 'post');
   if (params) {
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(
@@ -22,9 +26,9 @@ export function dummiesGet(http: HttpClient, rootUrl: string, params?: DummiesGe
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<Dummy>>;
+      return r as StrictHttpResponse<MazeDto>;
     })
   );
 }
 
-dummiesGet.PATH = '/dummies';
+mazesUploadPost.PATH = '/Mazes/upload';

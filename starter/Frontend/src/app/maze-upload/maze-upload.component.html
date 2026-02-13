@@ -1,0 +1,15 @@
+<div class="upload-container">
+    <h2>Upload Maze</h2>
+
+    <div class="input-group">
+        <input type="file" id="fileInput" (change)="onFileSelected($event)" accept=".txt">
+    </div>
+
+    <button (click)="onUpload()" [disabled]="!selectedFile || isUploading">
+        {{ isUploading ? 'Uploading...' : 'Upload' }}
+    </button>
+
+    <p *ngIf="message" [class.error]="message.includes('failed')" [class.success]="message.includes('successful')">
+        {{ message }}
+    </p>
+</div>
